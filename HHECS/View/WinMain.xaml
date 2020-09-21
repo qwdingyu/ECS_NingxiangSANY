@@ -1,0 +1,331 @@
+﻿<win:BaseWindow
+    xmlns:win="clr-namespace:HHECS.View.Win"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:model ="clr-namespace:HHECS.Model.Entities;assembly=HHECS.Model"
+        x:Class="HHECS.View.WinMain"
+    mc:Ignorable="d"
+        Title="华恒ECS" Height="450" Width="800" Loaded="Window_Loaded" Closing="BaseWindow_Closing">
+    <Window.Resources>
+        <Style TargetType="StackPanel">
+            <Setter Property="Orientation" Value="Horizontal"/>
+            <Setter Property="HorizontalAlignment" Value="Left"/>
+            <Setter Property="VerticalAlignment" Value="Top"/>
+            <Setter Property="Margin" Value="5"/>
+        </Style>
+    </Window.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+        </Grid.RowDefinitions>
+        <Menu x:Name="MenuMain" Grid.Row="0" MenuItem.Click="MenuMain_Checked">
+            <Menu.ItemTemplate>
+                <HierarchicalDataTemplate DataType="{x:Type model:MenuOperation}" ItemsSource="{Binding Children}">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="{Binding MenuName}"/>
+                    </StackPanel>
+                </HierarchicalDataTemplate>
+            </Menu.ItemTemplate>
+        </Menu>
+        <ToolBar Grid.Row="1">
+            <Button x:Name="Btn_BeginExcute" Click="Btn_BeginExcute_Click"  Content="开始处理"/>
+            <Button x:Name="Btn_EndExcute" Click="Btn_EndExcute_Click" IsEnabled="False" Content="停止处理"/>
+            <!--<Button x:Name="Btn_InitLED" Click="Btn_InitLED_Click"  Content="初始化LED"/>-->
+        </ToolBar>
+
+        <Grid x:Name="GridMain" Grid.Row="2">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center"  Grid.Column="0" Grid.Row="0">
+                <TextBlock Text="ECS 监 控" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="28" FontWeight="Bold"/>
+            </StackPanel>
+
+            <ScrollViewer  x:Name="StockerView" ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.HorizontalScrollBarVisibility="Auto"  Grid.Column="0" Grid.Row="1">
+                <StackPanel x:Name="MonitorPanel" Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Column="0" Grid.Row="1" Margin="10"/>
+            </ScrollViewer>
+            <!--<GridSplitter Grid.Row="2"  HorizontalAlignment="Stretch" VerticalAlignment="Center" Background="Gray" ShowsPreview="True" Height="3"/>-->
+            <TabControl Grid.Row="1" Grid.RowSpan="4">
+                <TabItem Header="站台监控" Width="100">
+                    <DataGrid x:Name="DGStation" >
+                        <DataGrid.RowDetailsTemplate>
+                            <DataTemplate>
+                                <Border BorderThickness="0" Padding="10">
+                                    <Border.Resources>
+                                        <Style TargetType="GroupBox">
+                                            <Setter Property="Foreground" Value="Black"/>
+                                        </Style>
+                                    </Border.Resources>
+                                    <StackPanel Orientation="Vertical">
+                                        <GroupBox Header="PLC">
+                                            <StackPanel Orientation="Horizontal">
+                                                <GroupBox Header="请求">
+                                                    <WrapPanel Orientation="Horizontal">
+                                                        <TextBlock Text="报文: " VerticalAlignment="Center"/>
+                                                        <TextBlock Text="{Binding RequestMessage}" VerticalAlignment="Center"/>
+                                                        <TextBlock Text="装载: " VerticalAlignment="Center"/>
+                                                        <TextBlock Text="{Binding RequestLoadStatus}" VerticalAlignment="Center"/>
+
+                                                        <TextBlock Text="型号输出: " VerticalAlignment="Center"/>
+                                                        <TextBlock Text="{Binding ProductId}" VerticalAlignment="Center"/>
+                                                        <TextBlock Text="人工确认信号: " VerticalAlignment="Center"/>
+                                                        <TextBlock Text="{Binding ManualSign}" VerticalAlignment="Center"/>
+
+                                                        <TextBlock Text="读码器: " VerticalAlignment="Center"/>
+                                                        <TextBlock Text="{Binding RequestNumber}" VerticalAlignment="Center"/>
+                                                        <TextBlock Text="条码: " VerticalAlignment="Center" />
+                                                        <TextBlock Text="{Binding RequestBarcode}" VerticalAlignment="Center" />
+                                                        <TextBlock Text="重量: " VerticalAlignment="Center" />
+                                                        <TextBlock Text="{Binding RequestWeight}" VerticalAlignment="Center" />
+                                                        <TextBlock Text="长度: " VerticalAlignment="Center" />
+                                                        <TextBlock Text="{Binding RequestLength}" VerticalAlignment="Center" />
+                                                        <TextBlock Text="宽度: " VerticalAlignment="Center" />
+                                                        <TextBlock Text="{Binding RequestWidth}" VerticalAlignment="Center" />
+                                                        <TextBlock Text="高度: " VerticalAlignment="Center" />
+                                                        <TextBlock Text="{Binding RequestHeight}" VerticalAlignment="Center" />
+                                                    </WrapPanel>
+                                                </GroupBox>
+                                                <GroupBox Header="到达">
+                                                    <WrapPanel Orientation="Horizontal">
+                                                        <TextBlock Text="报文: " VerticalAlignment="Center" />
+                                                        <TextBlock Text="{Binding WCSReplyMessage}" VerticalAlignment="Center" />
+                                                        <TextBlock Text="结果: " VerticalAlignment="Center" />
+                                                        <TextBlock Text="{Binding ArriveResult}" VerticalAlignment="Center" />
+
+                                                        <TextBlock Text="型号输出: " VerticalAlignment="Center" />
+                                                        <TextBlock Text="{Binding ProductId}" VerticalAlignment="Center" />
+                                                        <TextBlock Text="人工确认信号: " VerticalAlignment="Center" />
+                                                        <TextBlock Text="{Binding ManualSign}" VerticalAlignment="Center" />
+
+                                                        <TextBlock Text="读码器: " VerticalAlignment="Center" />
+                                                        <TextBlock Text="{Binding ArriveRealAddress}" VerticalAlignment="Center" />
+                                                        <TextBlock Text="分配地址: " VerticalAlignment="Center" />
+                                                        <TextBlock Text="{Binding ArriveAllcationAddress}" VerticalAlignment="Center" />
+                                                        <TextBlock Text="条码: " VerticalAlignment="Center" />
+                                                        <TextBlock Text="{Binding ArriveBarcode}" VerticalAlignment="Center" />
+                                                    </WrapPanel>
+                                                </GroupBox>
+                                            </StackPanel>
+                                        </GroupBox>
+                                        <GroupBox Header="WCS">
+                                            <StackPanel Orientation="Horizontal">
+                                                <GroupBox Header="请求回复">
+                                                    <WrapPanel Orientation="Horizontal" Background="LightCyan">
+                                                        <TextBlock Text="报文: " VerticalAlignment="Center" />
+                                                        <TextBlock Text="{Binding WCSReplyMessage}" VerticalAlignment="Center" />
+                                                        <TextBlock Text="装载: " VerticalAlignment="Center" />
+                                                        <TextBlock Text="{Binding WCSReplyLoadStatus}" VerticalAlignment="Center" />
+                                                        <TextBlock Text="读码器: " VerticalAlignment="Center" />
+                                                        <TextBlock Text="{Binding WCSReplyNumber}" VerticalAlignment="Center" />
+                                                        <TextBlock Text="条码: " VerticalAlignment="Center" />
+                                                        <TextBlock Text="{Binding WCSReplyBarcode}" VerticalAlignment="Center" />
+                                                        <TextBlock Text="重量: " VerticalAlignment="Center" />
+                                                        <TextBlock Text="{Binding WCSReplyWeight}" VerticalAlignment="Center" />
+                                                        <TextBlock Text="长度: " VerticalAlignment="Center" />
+                                                        <TextBlock Text="{Binding WCSReplyLength}" VerticalAlignment="Center" />
+                                                        <TextBlock Text="宽度: " VerticalAlignment="Center" />
+                                                        <TextBlock Text="{Binding WCSReplyWidth}" VerticalAlignment="Center" />
+                                                        <TextBlock Text="高度: " VerticalAlignment="Center" />
+                                                        <TextBlock Text="{Binding WCSReplyHeight}" VerticalAlignment="Center" />
+                                                        <TextBlock Text="目标地址: " VerticalAlignment="Center" />
+                                                        <TextBlock Text="{Binding WCSReplyAddress}" VerticalAlignment="Center" />
+                                                    </WrapPanel>
+                                                </GroupBox>
+                                                <GroupBox Header="控制回复">
+                                                    <WrapPanel  Orientation="Horizontal" Background="LightCyan">
+                                                        <TextBlock Text="报文: " VerticalAlignment="Center" />
+                                                        <TextBlock Text="{Binding WCSACKMessage}" VerticalAlignment="Center" />
+                                                        <TextBlock Text="装载: " VerticalAlignment="Center" />
+                                                        <TextBlock Text="{Binding WCSACKLoadStatus}" VerticalAlignment="Center" />
+                                                        <TextBlock Text="读码器: " VerticalAlignment="Center" />
+                                                        <TextBlock Text="{Binding WCSACKNumber}" VerticalAlignment="Center" />
+                                                    </WrapPanel>
+                                                </GroupBox>
+                                            </StackPanel>
+                                        </GroupBox>
+                                    </StackPanel>
+                                </Border>
+                            </DataTemplate>
+                        </DataGrid.RowDetailsTemplate>
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="站台编码" Binding="{Binding Code}"/>
+                            <DataGridTextColumn Header="站台名" Binding="{Binding Name}"/>
+                            <DataGridTextColumn Header="P-请求上料/下料" Binding="{Binding Request_Load}"></DataGridTextColumn>
+                            <DataGridTextColumn Header="P-地址请求-货物数量" Binding="{Binding RequestGoodsCount}"></DataGridTextColumn>
+
+                            <DataGridTextColumn Header="P-型号输出" Binding="{Binding ProductId}"></DataGridTextColumn>
+
+                            <DataGridTextColumn Header="P-人工确认信号" Binding="{Binding ManualSign}"></DataGridTextColumn>
+
+                            <DataGridTextColumn Header="P-请求报文" Binding="{Binding RequestMessage}"/>
+                            <DataGridTextColumn Header="P-请求装载" Binding="{Binding RequestLoadStatus}"/>
+                            <DataGridTextColumn Header="P-请求读码器" Binding="{Binding RequestNumber}"/>
+                            <DataGridTextColumn Header="P-请求条码" Binding="{Binding RequestBarcode}"/>
+                            <DataGridTextColumn Header="P-请求重量" Binding="{Binding RequestWeight}"/>
+                            <DataGridTextColumn Header="P-请求长度" Binding="{Binding RequestLength}"/>
+                            <DataGridTextColumn Header="P-请求宽度" Binding="{Binding RequestWidth}"/>
+                            <DataGridTextColumn Header="P-请求高度" Binding="{Binding RequestHeight}"/>
+
+                            <DataGridTextColumn Header="W-请求报文" Binding="{Binding WCSReplyMessage}"/>
+                            <DataGridTextColumn Header="W-请求装载" Binding="{Binding WCSReplyLoadStatus}"/>
+                            <DataGridTextColumn Header="W-请求读码器" Binding="{Binding WCSReplyNumber}"/>
+                            <DataGridTextColumn Header="W-请求条码" Binding="{Binding WCSReplyBarcode}"/>
+                            <DataGridTextColumn Header="W-请求重量" Binding="{Binding WCSReplyWeight}"/>
+                            <DataGridTextColumn Header="W-请求长度" Binding="{Binding WCSReplyLength}"/>
+                            <DataGridTextColumn Header="W-请求宽度" Binding="{Binding WCSReplyWidth}"/>
+                            <DataGridTextColumn Header="W-请求高度" Binding="{Binding WCSReplyHeight}"/>
+                            <DataGridTextColumn Header="W-请求目标地址" Binding="{Binding WCSReplyAddress}"/>
+
+                            <DataGridTextColumn Header="P-到达报文" Binding="{Binding ArriveMessage}"/>
+                            <DataGridTextColumn Header="P-到达结果" Binding="{Binding ArriveResult}"/>
+                            <DataGridTextColumn Header="P-到达读码器" Binding="{Binding ArriveRealAddress}"/>
+                            <DataGridTextColumn Header="P-到达分配地址" Binding="{Binding ArriveAllcationAddress}"/>
+                            <DataGridTextColumn Header="P-到达条码" Binding="{Binding ArriveBarcode}"/>
+
+                            <DataGridTextColumn Header="W-到达报文" Binding="{Binding WCSACKMessage}"/>
+                            <DataGridTextColumn Header="W-到达装载" Binding="{Binding WCSACKLoadStatus}"/>
+                            <DataGridTextColumn Header="W-站台编码" Binding="{Binding WCSACKNumber}"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </TabItem>
+
+                <TabItem Header="绗车面板" Width="100">
+                    <ScrollViewer x:Name="scrList" ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.HorizontalScrollBarVisibility="Auto" >
+                        <StackPanel  x:Name="EquipmentPanel">
+                        </StackPanel>
+                    </ScrollViewer>
+                </TabItem>
+
+                <TabItem Header="日志面板" Width="100">
+                    <TabControl>
+                        <TabItem Header="运行日志">
+                            <ScrollViewer ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.HorizontalScrollBarVisibility="Auto">
+                                <StackPanel x:Name="LogPanel">
+
+                                </StackPanel>
+                            </ScrollViewer>
+                        </TabItem>
+                        <TabItem Header="报警日志">
+                            <ListBox x:Name="List_Alarm">
+
+                            </ListBox>
+                        </TabItem>
+                    </TabControl>
+                </TabItem>
+
+                <TabItem Header="焊接机器人面板" Width="130">
+                    <TabControl>
+                        <TabItem Header="岛1焊接—ZTLZD1" Width="150">
+                            <Grid Margin="5,5,5,5">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition></RowDefinition>
+                                    <RowDefinition></RowDefinition>
+                                </Grid.RowDefinitions>
+                                <Grid Grid.Row="0">
+                                    <ScrollViewer ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.HorizontalScrollBarVisibility="Auto">
+                                        <StackPanel x:Name="WeldingType_LA1_1" Grid.Row="1">
+
+                                        </StackPanel>
+
+                                    </ScrollViewer>
+                                </Grid>
+                                <Grid Grid.Row="1">
+                                    <ScrollViewer ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.HorizontalScrollBarVisibility="Auto">
+                                        <StackPanel x:Name="WeldingType_LA1_2">
+
+                                        </StackPanel>
+
+                                    </ScrollViewer>
+                                </Grid>
+                            </Grid>
+                        </TabItem>
+
+                        <TabItem Header="岛2焊接—ZTLZD2" Width="150">
+                            <Grid Margin="5,5,5,5">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition></RowDefinition>
+                                    <RowDefinition></RowDefinition>
+                                </Grid.RowDefinitions>
+                                <Grid Grid.Row="0">
+                                    <ScrollViewer ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.HorizontalScrollBarVisibility="Auto">
+                                        <StackPanel x:Name="WeldingType_LA2_1">
+
+                                        </StackPanel>
+                                    </ScrollViewer>
+                                </Grid>
+                                <Grid Grid.Row="1">
+                                    <ScrollViewer ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.HorizontalScrollBarVisibility="Auto">
+                                        <StackPanel x:Name="WeldingType_LA2_2">
+
+                                        </StackPanel>
+                                    </ScrollViewer>
+                                </Grid>
+                            </Grid>
+                        </TabItem>
+
+                        <TabItem Header="岛3焊接—ZTLZD3" Width="150">
+                            <Grid Margin="5,5,5,5">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition></RowDefinition>
+                                    <RowDefinition></RowDefinition>
+                                </Grid.RowDefinitions>
+                                <Grid Grid.Row="0">
+                                    <ScrollViewer ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.HorizontalScrollBarVisibility="Auto">
+                                        <StackPanel x:Name="WeldingType_LA3_1">
+
+                                        </StackPanel>
+                                    </ScrollViewer>
+                                </Grid>
+                                <Grid Grid.Row="1">
+                                    <ScrollViewer ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.HorizontalScrollBarVisibility="Auto">
+                                        <StackPanel x:Name="WeldingType_LA3_2">
+
+                                        </StackPanel>
+                                    </ScrollViewer>
+                                </Grid>
+                            </Grid>
+                        </TabItem>
+                    </TabControl>
+                </TabItem>
+
+                <TabItem Header="组焊机器人面板" Width="130">
+                    <ScrollViewer x:Name="scrRobotForAeesmbly" ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.HorizontalScrollBarVisibility="Auto" >
+                        <StackPanel  x:Name="robotForAeesmblyPanel">
+                        </StackPanel>
+                    </ScrollViewer>
+                </TabItem>
+
+                <TabItem Header="机加工面板" Width="130">
+                    <ScrollViewer x:Name="scrMachiningTypeMonitor" ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.HorizontalScrollBarVisibility="Auto" >
+                        <StackPanel  x:Name="MachiningTypeMonitorPanel">
+                        </StackPanel>
+                    </ScrollViewer>
+                </TabItem>
+
+                <TabItem Header="下线站台面板">
+                    <ScrollViewer x:Name="scrStationForFinished" ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.HorizontalScrollBarVisibility="Auto" >
+                        <StackPanel  x:Name="StationForFinishedMonitorPanel">
+                        </StackPanel>
+                    </ScrollViewer>
+                </TabItem>
+            </TabControl>
+        </Grid>
+        <StatusBar Grid.Row="3" Background="#FF007ACC">
+            <TextBlock x:Name="txtStaus" Foreground="White"/>
+        </StatusBar>
+
+    </Grid>
+
+</win:BaseWindow>
